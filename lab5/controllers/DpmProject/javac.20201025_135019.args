@@ -1,0 +1,8 @@
+-Xlint
+-classpath
+D:/Users/aidan/AppData/Local/Programs/Webots/lib/controller/java/Controller.jar;lib/simlejos.jar;.
+-target
+11
+-source
+11
+DpmProject.java

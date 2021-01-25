@@ -1,0 +1,4 @@
+# Format: block_id x1 y1 x2 y2
+1 1 7 4 7
+2 7 7 7 4
+3 7 1 4 1

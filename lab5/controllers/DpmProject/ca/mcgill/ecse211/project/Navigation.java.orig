@@ -1,0 +1,320 @@
+package ca.mcgill.ecse211.project;
+
+
+import static ca.mcgill.ecse211.project.Resources.*;
+import static ca.mcgill.ecse211.project.LightLocalizer.*;
+
+import ca.mcgill.ecse211.playingfield.Point;
+
+/**
+ * The Navigation class is used to make the robot navigate around the playing field.
+ */
+public class Navigation {
+<<<<<<< HEAD
+  
+  private static final int TORQUE_SAMPLING_RATE = 100; // The sample rate for average torque calculation
+  private static final double TORQUE_THRESHOLD = 0.5; // Threshold for determining when the robot has left contact with the block
+  
+  private static int numSamples = 0; // Counts the number of samples used in the torque average
+  private static double torqueSum = 0; // Stores the sum of all torques to be averaged
+  
+=======
+
+>>>>>>> origin/map1
+  /** Do not instantiate this class. */
+  private Navigation() {}
+
+  /** Travels to the given destination. */
+  public static void travelTo(Point start, Point destination) {
+    // TODO
+    double x = destination.x;
+    double y = destination.y;
+    double deltaX = TILE_SIZE * x - Odometer.getOdometer().getXyt()[0];
+    double deltaY = TILE_SIZE * y - Odometer.getOdometer().getXyt()[1];
+    double xi = Odometer.getOdometer().getXyt()[0];
+    double yi = Odometer.getOdometer().getXyt()[1];
+    double finalTheta = Math.toDegrees(Math.atan2(deltaX, deltaY));
+    turnTo(finalTheta);
+    leftMotor.setSpeed(FORWARD_SPEED);
+    rightMotor.setSpeed(FORWARD_SPEED);
+    leftMotor.forward();
+    rightMotor.forward();
+    double distanceTraveled = 0;
+    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    while (distanceTraveled < distance) {
+      double deltaXf = Odometer.getOdometer().getXyt()[0] - xi;
+      double deltaYf = Odometer.getOdometer().getXyt()[1] - yi;
+      distanceTraveled = Math.sqrt(deltaXf * deltaXf + deltaYf * deltaYf);
+      leftMotor.setSpeed(FORWARD_SPEED);
+      rightMotor.setSpeed(FORWARD_SPEED);
+      leftMotor.forward();
+      rightMotor.forward();
+    }
+    leftMotor.stop();
+    rightMotor.stop();
+    // Think carefully about how you would integrate line detection here, if necessary
+    // Don't forget that destination.x and destination.y are in feet, not meters
+
+  }
+  //navigation travel assuming no obstacles 
+  public static void travelTo1 (Point start, Point end) {
+	  double startX = start.x;
+	  double startY = start.y;
+	  double endX = end.x;
+	  double endY = end.y;
+	  double angle = getDestinationAngle(start, end);
+	  if (angle == 0) {
+		  Point x = new Point(startX-0.5*TILE_SIZE, startY);
+		  simpleTravel(x);
+		  turnTo(angle);
+	  }else if (angle == 90) {
+		  Point x = new Point(startX, startY+0.5*TILE_SIZE);
+		  simpleTravel(x);
+		  turnTo(angle);
+	  }else if (angle ==180) {
+		  Point x = new Point(startX+0.5*TILE_SIZE, startY);
+		  simpleTravel(x);
+		  turnTo(angle);
+	  }else if (angle == 270) {
+		  Point x = new Point(startX, startY-0.5*TILE_SIZE);
+		  simpleTravel(x);
+		  turnTo(angle);
+	  }
+	  simpleTravel(end);
+  }
+
+  /**
+   * 
+   * @param destination
+   */
+  public static void simpleTravel(Point destination) {
+    double x = destination.x;
+    double y = destination.y;
+    double deltaX = TILE_SIZE * x - Odometer.getOdometer().getXyt()[0];
+    double deltaY = TILE_SIZE * y - Odometer.getOdometer().getXyt()[1];
+    double deltaX1 = x - Math.round(Odometer.getOdometer().getXyt()[0] / TILE_SIZE);
+    double deltaY1 = y - Math.round(Odometer.getOdometer().getXyt()[1] / TILE_SIZE);
+    double finalTheta = Math.toDegrees(Math.atan2(deltaX1, deltaY1));
+    turnTo(finalTheta);
+    double distance = Math.sqrt(deltaX1 * deltaX1 + deltaY1 * deltaY1);
+    moveStraightFor(TILE_SIZE*distance); 
+
+
+  }
+
+  /**
+   * Reclocalizes the bot
+   */
+  public static void relocalise() {
+  //Checkstyle error here makes our code bad so we ignore it
+    double curAngle = odometer.getXyt()[2];
+    turnTo(0);
+    moveStraightFor(-0.08);
+    LightLocalizer.goToNextLine();
+    odometer.setTheta(0);
+    moveStraightFor(-0.025);
+    turnTo(curAngle);
+    
+    
+  }
+
+  /**
+   * Turns the robot with a minimal angle towards the given input angle in degrees, no matter what its current
+   * orientation is. This method is different from {@code turnBy()}.
+   */
+  public static void turnTo(double angle) {
+    // TODO
+    // Hint: You can do this in one line by reusing some helper methods declared in this class
+    leftMotor.setSpeed(ROTATE_SPEED);
+    rightMotor.setSpeed(ROTATE_SPEED);
+    double turningAngle = minimalAngle(Odometer.getOdometer().getXyt()[2], angle);
+    leftMotor.rotate(convertAngle(turningAngle), true);
+    rightMotor.rotate(-convertAngle(turningAngle), false);
+
+  }
+
+
+  /** Returns the angle that the robot should point towards to face the destination in degrees. */
+  public static double getDestinationAngle(Point current, Point destination) {
+    double dx = destination.x - current.x;
+    double dy = destination.y - current.y;
+    double dt = Math.toDegrees(Math.atan2(Math.abs(dy), Math.abs(dx)));
+    if (dx < 0 && dy > 0) {
+      return 270 + dt;
+    }
+    if (dx < 0 && dy < 0) {
+      return 90 + dt;
+    }
+    if (dx > 0 && dy > 0) {
+      return dt;
+    } 
+    if (dx==0 && dy<0) {
+    	return 90;
+    }
+    if (dx==0 && dy>0) {
+    	return 270;
+    }
+    if (dy==0 && dx<0) {
+	return 180;
+    }
+    if (dy==0 && dx>0) {
+	return 0;
+    }
+    return dt;
+    // return Math.toDegrees(dt);
+  }
+
+  /** Returns the signed minimal angle in degrees from initial angle to destination angle (deg). */
+  public static double minimalAngle(double initialAngle, double destAngle) {
+    double turningAngle = destAngle - initialAngle;
+    if (turningAngle > 180) {
+      turningAngle -= 360;
+    }
+    // angle < 180, increase by 360
+    if (turningAngle < -180) {
+      turningAngle += 360;
+    }
+    return turningAngle;
+  }
+
+  /** Returns the distance between the two points in tile lengths (feet). */
+  public static double distanceBetween(Point p1, Point p2) {
+    return Math.sqrt((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
+  }
+
+  // TODO Bring Navigation-related helper methods from Labs 2 and 3 here
+  // You can also add other helper methods here, but remember to document them with Javadoc (/**)!
+  /**
+   * Converts input distance to the total rotation of each wheel needed to cover that distance.
+   * 
+   * @param distance the input distance in meters
+   * @return the wheel rotations necessary to cover the distance
+   */
+  public static int convertDistance(double distance) {
+    return (int) ((distance * 180.0) / (Math.PI * WHEEL_RAD));
+  }
+
+  /**
+   * Converts input angle to the total rotation of each wheel needed to rotate the robot by that angle.
+   * 
+   * @param angle the input angle in degrees
+   * @return the wheel rotations necessary to rotate the robot by the angle
+   */
+  public static int convertAngle(double angle) {
+    return convertDistance((angle * Math.PI * BASE_WIDTH) / 360.0);
+  }
+
+  /**
+   * Turns the robot by a specified angle. Note that this method is different from {@code Navigation.turnTo()}. For
+   * example, if the robot is facing 90 degrees, calling {@code turnBy(90)} will make the robot turn to 180 degrees, but
+   * calling {@code Navigation.turnTo(90)} should do nothing (since the robot is already at 90 degrees).
+   * 
+   * @param angle the angle by which to turn, in degrees
+   */
+
+  public static void turnBy(double angle) {
+    int wheelAngle = convertAngle(angle);
+    leftMotor.rotate(wheelAngle, true);
+    rightMotor.rotate(-wheelAngle, false);
+  }
+
+  /**
+   * Turns the robot to the desired angle.
+   * 
+   * @param angle The angle to which the robot should turn
+   */
+  public static void turnToOld(int angle) {
+    angle = Math.abs(angle);
+    angle = angle % 360;
+    int currentAngle = (int) odometer.getXyt()[2];
+    turnBy(angle - currentAngle);
+
+  }
+
+  /**
+   * Moves the robot straight for the given distance.
+   * 
+   * @param distance in meters, may be negative
+   */
+  public static void moveStraightFor(double distance) {
+    int angle = convertDistance(distance);
+    leftMotor.rotate(angle, true);
+    rightMotor.rotate(angle, false);
+  }
+
+  /**
+   * Stops both motors.
+   */
+  public static void stopMotors() {
+    leftMotor.stop();
+    rightMotor.stop();
+  }
+
+  /**
+   * Starts both motors. (this method only calls forward() on them, it does not set speed or acceleration)
+   */
+  public static void startMotors() {
+    leftMotor.forward();
+    rightMotor.forward();
+  }
+
+  /**
+   * Sets the speed of both motors.
+   * 
+   * @param speed The speed at which to set both motors
+   */
+  public static void setBothSpeed(int speed) {
+    leftMotor.setSpeed(speed);
+    rightMotor.setSpeed(speed);
+  }
+
+  /**
+   * This method stops both motors and sets their speed to 0 degree/s.
+   */
+  public static void stopMotorsRemoveSpeed() {
+    leftMotor.setSpeed(0);
+    rightMotor.setSpeed(0);
+    Navigation.stopMotors();
+  }
+
+  /**
+   * This method will set the acceleration and speed of the motors to default values.
+   */
+  public static void prepareMotorsRotate() {
+    leftMotor.setSpeed(ROTATE_SPEED);
+    rightMotor.setSpeed(ROTATE_SPEED);
+  }
+  
+  /**
+   * Initializes a thread to calculate average torque 
+   */
+  public static double calcAverageTorque() {
+    /* Reset variables */
+    numSamples = 0;
+    torqueSum = 0;
+    
+    double curTorque, prevTorque;
+    
+    new Thread(() -> {
+      curTorque = (rightMotor.getTorque() + leftMotor.getTorque())/2;
+      sum += curTorque;
+      numSamples++;
+      sleepFor(TORQUE_SAMPLING_RATE);
+      prevTorque = curTorque;
+      curTorque = (rightMotor.getTorque() + leftMotor.getTorque())/2;
+      sum += curTorque;
+      numSamples++;
+      
+      while(Math.abs(Math.abs(curTorque) - Math.abs(prevTorque()) < TORQUE_THRESHOLD) {
+        sleepFor(TORQUE_SAMPLING_RATE);
+        prevTorque = curTorque;
+        curTorque = (rightMotor.getTorque() + leftMotor.getTorque())/2;
+        sum += curTorque;
+        numSamples++;
+        
+      }
+    }).start;
+    
+    return torqueSum/numSamples;
+  }
+}
