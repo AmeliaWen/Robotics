@@ -1,0 +1,110 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  basicTimeStep 16
+  coordinateSystem "NUE"
+  contactProperties [
+    ContactProperties {
+      material1 "DPM-Tile"
+      material2 "Rubber"
+      coulombFriction [
+        1000
+      ]
+      bounce 0.1
+      softCFM 0.0001
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.31219105979833944 0.9081762240408953 0.27884169033487677 1.5541427675946589
+  position 0.9168430579882153 0.6297937757345227 0.33373777299770374
+}
+DPM-Floor {
+  dimension 7 7
+  wallHeight 0.2
+  children [
+    DPM-Marker {
+      translation 0.15 0.15
+      r1 0
+      r2 0.015
+      sections 25
+      ringColor 1 0 0
+      borderColor 1 0 0
+    }
+    DPM-Marker {
+      translation 0.25 0.15
+      r1 0
+      r2 0.015
+      sections 25
+      ringColor 0 0 1
+      borderColor 0 0 1
+    }
+  ]
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+DPM-Robot {
+  hidden position_7_0 0.03604531563111167
+  hidden translation_8 6.595971266676326e-07 4.3116490980821265e-05 0.00010817448370023519
+  hidden rotation_8 -0.9995198029483454 0.025785076506711416 0.01718410147909865 0.9671694611715071
+  hidden position_9_0 0.037151616146677884
+  hidden translation_10 5.382005960619107e-07 4.578566449248145e-05 0.00010434256493816949
+  hidden rotation_10 -0.9995621800432779 0.023818203633597764 0.017553956898599843 1.0766703811398997
+  hidden rotation_12 1 0 0 1.2477887520467437e-06
+  hidden rotation_15 1 0 0 1.2783772104696978e-06
+  translation 0.249824 0.064162 0.253269
+  rotation -0.0001239276857281904 0.9986621773127117 0.05170918919266445 3.1398646602538602
+  children [
+    MainAssemblyA3-solid {
+      translation 0.001 -0.021 0.008
+      rotation 1 0 0 -1.571595307179586
+    }
+    EV3-Ultrasonic {
+      name "S1"
+      translation -6.97603e-07 0.028 0.083
+      rotation 0.9999999999859073 -1.08283999998474e-06 5.197409999926755e-06 -1.571595307179586
+    }
+    EV3-ColorSensor {
+      name "S2"
+      translation -2.65359e-08 -0.0399 -0.0752
+      rotation 0 1 0 3.14159
+    }
+    BallCaster {
+      translation -0.0228 -0.05742 -0.047
+      rotation 1 0 0 -1.57
+    }
+    BallCaster {
+      translation 0.0248 -0.0575 -0.048
+      rotation 1 0 0 -1.5707953071795862
+    }
+    EV3-LargeMotor {
+      name "D"
+      translation 0.048 -0.0420001 0.006
+      rotation -3.3905013482585576e-09 0.7071062811861719 0.7071072811865696 3.14159
+      position 4292.25483321325
+      children [
+        Wheel {
+          translation -0.023 0 0
+          rotation 0 0 1 1.57
+        }
+      ]
+    }
+    EV3-LargeMotor {
+      name "A"
+      translation -0.0476 -0.0419999 0.006
+      rotation -3.3891510791584073e-09 0.7068252250641434 0.7073882252434113 3.14159
+      position 5257.124917228426
+      children [
+        Wheel {
+          translation 0.023 0 0
+          rotation 0 0 1 -1.57
+        }
+      ]
+    }
+    EV3 {
+      rotation -1 0 0 1.57
+    }
+  ]
+  controller "Lab3"
+}
