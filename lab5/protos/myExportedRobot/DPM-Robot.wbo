@@ -1,0 +1,67 @@
+#VRML_OBJ R2020b utf8
+DPM-Robot {
+  hidden rotation_10 -0.592753930764952 -0.3920608357449785 0.7035133819890331 3.779693219787112
+  hidden rotation_12 -0.9989790808848632 -0.04375463273764833 0.011239575989664201 5.77981088851749
+  translation 0.2369 0.0655 0.2369
+  rotation 0 -1 0 -0.7854053071795866
+  children [
+    EV3-Ultrasonic {
+      name "S1"
+      translation 0.002 0.065 -0.076
+      rotation 0 0.7071067811865475 0.7071067811865475 -3.14159
+    }
+    EV3-ColorSensor {
+      name "S2"
+      translation 0.0302 -0.028 -0.05
+      rotation 0 1 0 -3.141592653589586
+    }
+    EV3-ColorSensor {
+      name "S3"
+      translation -0.0302 -0.028 -0.05
+      rotation 0 1 0 -3.141592653589586
+    }
+    BallCaster {
+      name "ballAside"
+      translation -0.0397 -0.0357 0.048
+      rotation 1 0 0 -1.5708
+    }
+    BallCaster {
+      name "ballDside"
+      translation 0.0397 -0.0357 0.048
+      rotation 1 0 0 -1.5708
+    }
+    EV3-LargeMotor {
+      name "A"
+      translation -0.056 -0.0121 -0.014
+      rotation -1 0 0 1.5708
+      position 13.124864670565245
+      children [
+        Wheel {
+          translation -0.022 0 0
+          rotation 0 0 1 -1.5708
+        }
+      ]
+    }
+    EV3-LargeMotor {
+      name "D"
+      translation 0.056 -0.0121 -0.014
+      rotation -1 0 0 1.5708
+      position 13.124867999470545
+      children [
+        Wheel {
+          translation 0.022 0 0
+          rotation 0 0 1 -1.5708
+        }
+      ]
+    }
+    reinforcedUSLS_base-solid {
+      translation -2.1684e-19 0.0125 -0.016
+      rotation 1 0 0 -1.5708
+    }
+    EV3 {
+      translation 0 0.014 0.008
+      rotation 1 0 0 -1.5708
+    }
+  ]
+  controller "Lab3"
+}
