@@ -1,0 +1,91 @@
+#VRML_SIM R2020b utf8
+WorldInfo {
+  basicTimeStep 16
+  coordinateSystem "NUE"
+  contactProperties [
+    ContactProperties {
+      material1 "DPM-Tile"
+      material2 "Rubber"
+      coulombFriction [
+        1000
+      ]
+      bounce 0.1
+      softCFM 0.0001
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.5572806540274248 -0.5983586983778104 -0.5756779835310518 4.349434853694089
+  position 0.9147065488595392 2.5963160104652205 0.47808302676117553
+}
+DPM-Floor {
+  dimension 7 7
+  wallHeight 0.2
+  children [
+    DPM-Marker {
+      translation 0.15 0.15
+      r1 0
+      r2 0.015
+      sections 25
+      ringColor 1 0 0
+      borderColor 1 0 0
+    }
+  ]
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+DPM-Robot {
+  hidden position_1_0 0.015868245986211848
+  hidden rotation_2 -0.9787519844875243 -0.08750108608549662 -0.18544032138559136 2.2417911455196764
+  hidden position_4_0 -17.925483086609848
+  hidden translation_5 3.4503808801813e-05 0.0003045200842029933 -2.6849074515025945e-05
+  hidden rotation_5 -0.06013485390841529 0.3631689630110323 -0.9297806750255163 4.463325213348317
+  hidden rotation_7 -0.9999999999999999 0 0 5.334490513400754
+  hidden rotation_10 -1 0 0 5.082188230896137
+  translation 0.15 0.0752732 0.15
+  rotation -6.637087442453803e-05 0.9994001751831149 -0.034630700813961135 3.139944894749593
+  children [
+    BallCaster {
+      translation -0.0228 -0.0575 0.047
+      rotation 1 0 0 -1.57
+    }
+    MainAssemblyA5-solid {
+      translation 0 -0.0215 -0.003
+      rotation 1 0 0 -1.57
+    }
+    BallCaster {
+      translation 0.0248 -0.0575 0.047
+      rotation 1 0 0 -1.5707953071795862
+    }
+    EV3-LargeMotor {
+      name "A"
+      translation -0.0478 -0.042 -0.006
+      rotation 1 0 0 -1.5707953071795862
+      position 4292.254838186777
+      children [
+        Wheel {
+          translation -0.023 0 0
+          rotation 0 0 1 1.57
+        }
+      ]
+    }
+    EV3-LargeMotor {
+      name "D"
+      translation 0.0474 -0.042 -0.006
+      rotation -1 0 0 1.57
+      position 5257.124922115294
+      children [
+        Wheel {
+          translation 0.023 0 0
+          rotation 0 0 1 -1.57
+        }
+      ]
+    }
+    EV3 {
+      rotation -1 0 0 1.57
+    }
+  ]
+  controller "Lab2"
+}
